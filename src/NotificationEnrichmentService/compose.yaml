@@ -1,0 +1,22 @@
+﻿services:
+  postgres:
+    image: postgres:latest
+    container_name: enrichment-service
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "6434:5432"
+    restart: unless-stopped
+    networks:
+      - order-processing-service-network
+  
+networks:
+  order-processing-service-network:
+    driver: bridge
+  configuration-service-network:
+    driver: bridge
+
+volumes:
+  order-processing-service-kafka-data:
