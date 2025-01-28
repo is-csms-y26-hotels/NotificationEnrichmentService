@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\NotificationEnrichmentService.Application.Abstractions\NotificationEnrichmentService.Application.Abstractions.csproj"/>
+        <ProjectReference Include="..\NotificationEnrichmentService.Application.Contracts\NotificationEnrichmentService.Application.Contracts.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    </ItemGroup>
+
+</Project>
