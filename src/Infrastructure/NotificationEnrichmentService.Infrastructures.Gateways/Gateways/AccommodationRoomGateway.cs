@@ -1,17 +1,37 @@
-﻿using NotificationEnrichmentService.Application.Abstractions.Gateways;
+﻿using Accommodation.Service.Presentation.Grpc;
+using NotificationEnrichmentService.Application.Abstractions.Gateways;
 using NotificationEnrichmentService.Application.Models.Bookings.ObjectValues;
 
 namespace NotificationEnrichmentService.Infrastructures.Gateways.Gateways;
 
-public class AccommodationRoomGateway : IAccommodationRoomGateway
+public class AccommodationRoomGateway(
+    RoomService.RoomServiceClient client) : IAccommodationRoomGateway
 {
-    public Task<RoomPhysicalNumber> GetRoomPhysicalNumber(RoomId roomId, CancellationToken cancellationToken)
+    public async Task<RoomPhysicalNumber> GetRoomPhysicalNumber(RoomId roomId, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new RoomPhysicalNumber(125));
+        var request = new GetRoomPhysicalNumberRequest
+        {
+            RoomId = roomId.Value,
+        };
+
+        GetRoomPhysicalNumberResponse response = await client.GetRoomPhysicalNumberAsync(
+            request,
+            cancellationToken: cancellationToken);
+
+        return new RoomPhysicalNumber(response.RoomNumber);
     }
 
-    public Task<HotelId> GetHotelId(RoomId roomId, CancellationToken cancellationToken)
+    public async Task<HotelId> GetHotelId(RoomId roomId, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new HotelId(555));
+        var request = new GetHotelIdByRoomIdRequest
+        {
+            RoomId = roomId.Value,
+        };
+
+        GetHotelIdByRoomIdResponse response = await client.GetHotelIdByRoomIdAsync(
+            request,
+            cancellationToken: cancellationToken);
+
+        return new HotelId(response.HotelId);
     }
 }

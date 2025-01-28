@@ -1,12 +1,18 @@
-﻿using NotificationEnrichmentService.Application.Abstractions.Gateways;
+﻿using Accommodation.Service.Presentation.Grpc;
+using NotificationEnrichmentService.Application.Abstractions.Gateways;
 using NotificationEnrichmentService.Application.Models.Bookings.ObjectValues;
 
 namespace NotificationEnrichmentService.Infrastructures.Gateways.Gateways;
 
-public class AccommodationHotelGateway : IAccommodationHotelGateway
+public class AccommodationHotelGateway(
+    HotelService.HotelServiceClient client) : IAccommodationHotelGateway
 {
-    public Task<HotelName> GetHotelName(HotelId hotelId, CancellationToken cancellationToken)
+    public async Task<HotelName> GetHotelName(HotelId hotelId, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new HotelName("hotel_name-1"));
+        var request = new GetHotelNameRequest { HotelId = hotelId.Value };
+
+        GetHotelNameResponse response = await client.GetHotelNameAsync(request, cancellationToken: cancellationToken);
+
+        return new HotelName(response.HotelName);
     }
 }
